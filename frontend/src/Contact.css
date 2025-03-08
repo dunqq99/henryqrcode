@@ -1,0 +1,32 @@
+/* Contact.css */
+
+.contact-container {
+    max-width: 800px; /* Giới hạn chiều rộng tối đa */
+    margin: 40px auto;  /* Căn giữa và thêm khoảng cách trên/dưới */
+    padding: 30px;      /* Khoảng cách bên trong */
+    border: 1px solid #ddd; /* Đường viền */
+    border-radius: 8px;     /* Bo góc */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+    background-color: #f8f8f8; /* Màu nền (tùy chọn) */
+  }
+  
+  .contact-container h2 {
+    text-align: center;    /* Căn giữa tiêu đề */
+    color: #333;          /* Màu chữ */
+    margin-bottom: 20px;    /* Khoảng cách dưới tiêu đề */
+    font-size: 28px;      /* Cỡ chữ */
+  }
+  
+  .contact-container p {
+    text-align: center;    /* Căn giữa đoạn văn */
+    margin-bottom: 15px;  /* Khoảng cách dưới đoạn văn */
+    line-height: 1.6;      /* Độ cao dòng (giúp dễ đọc hơn) */
+    font-size: 18px;       /* Cỡ chữ */
+  }
+  .contact-container p a {
+      text-decoration: none;
+      color: #007bff;
+  }
+  .contact-container p a:hover {
+      text-decoration: underline;
+  }
