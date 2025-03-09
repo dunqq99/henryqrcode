@@ -68,3 +68,18 @@ html, body {
 .footer p {
   margin: 0 15px; /* Tăng khoảng cách giữa các mục trong footer */
 }
+
+  /* Thêm các quy tắc media query cho chế độ xem trên thiết bị di động */
+  @media (max-width: 768px) {
+    .footer {
+      background-color: #a7cff8;
+      color: #615fd4;
+      text-align: center;
+      padding: 20px 0;
+      margin-top: 20px;
+      display: flex
+;
+      justify-content: center;
+      flex-direction: column;
+  }
+  }

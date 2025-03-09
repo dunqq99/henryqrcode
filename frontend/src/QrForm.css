@@ -276,4 +276,28 @@ body {
     color: #047cff;
   }
   
-  
+  /* Thêm các quy tắc media query cho chế độ xem trên thiết bị di động */
+@media (max-width: 768px) {
+  .qr-main-container {
+    flex-direction: column; /* Xếp chồng các cột */
+    gap: 10px; /* Giảm khoảng cách */
+  }
+
+  .qr-frame-container,
+  .qr-form-container,
+  .qr-display-container {
+    width: 80%; /* Chiều rộng đầy đủ */
+  }
+
+  .bank-search-box {
+    width: 75%; /* Chiều rộng gần như đầy đủ */
+  }
+
+  .qr-code-overlay {
+    position: absolute;
+    top: 55px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+}

@@ -30,3 +30,16 @@
   .contact-container p a:hover {
       text-decoration: underline;
   }
+
+/* Thêm các quy tắc media query cho chế độ xem trên thiết bị di động */
+@media (max-width: 768px) {
+  .contact-container {
+    max-width: 70%;
+    margin: 40px auto;
+    padding: 30px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f8f8f8;
+}
+}
