@@ -262,12 +262,18 @@ function QrForm() {
                 {qrCode ? (
                     <div className="qr-frame-container">
                         <img
-                            src="images/vietqr-payment-kit.png"
+                            src="images/evn-kit-payment.png"
                             alt="Khung VietQR"
                             className="qr-frame"
                         />
                         <div className="qr-code-overlay">
-                            <QRCodeCanvas value={qrCode} size={150} />
+                        <QRCodeCanvas
+                            value={qrCode}
+                            size={180}
+                            level="H"
+                            fgColor="#0C2477"
+                            bgColor="#FFFFFF"
+                        />
                         </div>
                         <p className="qr-content">
                             Nội dung: {content}
@@ -300,12 +306,18 @@ function QrForm() {
                 ) : (
                     <div className="qr-frame-container">
                         <img
-                            src="images/vietqr-payment-kit.png"
+                            src="images/evn-kit-payment.png"
                             alt="Khung VietQR"
                             className="qr-frame"
                         />
                         <div className="qr-code-overlay">
-                            <QRCodeCanvas value="https://vietqr.online" size={150} />
+                        <QRCodeCanvas 
+                            value="https://vietqr.online"  
+                            size={180}
+                            level="H"
+                            fgColor="#0C2477"
+                            bgColor="#FFFFFF"
+                            />
                         </div>
                         <p className="qr-string">Chưa có mã QR nào được tạo</p>
                     </div>
