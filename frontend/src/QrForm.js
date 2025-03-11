@@ -48,15 +48,15 @@ function convertNumberToWords(num) {
         if (chuc !== 0 && chuc !== 1) {
             s += ' ' + so[chuc] + ' mươi';
             if (donvi === 5) s += ' lăm';
-            else if (donvi === 1) s += ' mốt'; // Xử lý trường hợp 21, 31,...
+            else if (donvi === 1) s += ' mốt';
             else if (donvi !== 0) s += ' ' + so[donvi];
         } else if (chuc === 1) {
             s += ' mười';
             if (donvi === 5) s += ' lăm';
-            else if (donvi !== 0) s += ' ' + so[donvi]; // Không cần xử lý 15, vì đã có ở trên
-        } else if (donvi !== 0 && tram !== 0) { // Xử lý trường hợp 101, 205,...
+            else if (donvi !== 0) s += ' ' + so[donvi];
+        } else if (donvi !== 0 && tram !== 0) {
             s += ' ' + so[donvi];
-        } else if (donvi !== 0 && tram === 0) { // Xử lý trường hợp 001, 005,...
+        } else if (donvi !== 0 && tram === 0) {
             s += ' ' + so[donvi];
         }
 
@@ -64,7 +64,7 @@ function convertNumberToWords(num) {
     }
 
     let blocks = [];
-    let temp = n; // Tạo biến tạm để không thay đổi n
+    let temp = n;
     while (temp > 0) {
         blocks.push(temp % 1000);
         temp = Math.floor(temp / 1000);
@@ -90,9 +90,9 @@ function QrForm() {
     const [bankCode, setBankCode] = useState('');
     const [bankName, setBankName] = useState('');
     const [bankAccount, setbankAccount] = useState('');
-    const [userBankName, setuserBankName] = useState('');
+    const [originalUserBankName, setOriginalUserBankName] = useState('');
     const [amount, setAmount] = useState('');
-    const [content, setContent] = useState('');
+    const [originalContent, setOriginalContent] = useState('');
     const [qrCode, setQrCode] = useState('');
 
     const [showBankSearch, setShowBankSearch] = useState(false);
@@ -113,11 +113,13 @@ function QrForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        const sanitizedUserBankName = sanitizeInput(originalUserBankName);
+        const sanitizedContent = sanitizeInput(originalContent);
+
         try {
-            // 1. Lấy access token
             const tokenRes = await axios.post(
                 TOKEN_URL,
-                {}, // Body rỗng
+                {},
                 {
                     headers: {
                         Authorization: BASIC_AUTH,
@@ -126,17 +128,16 @@ function QrForm() {
             );
             const accessToken = tokenRes.data.access_token;
 
-            // 2. Tạo QR code
             const qrRes = await axios.post(
                 GENERATE_URL,
                 {
                     amount,
-                    content,
+                    content: sanitizedContent,
                     bankAccount,
                     bankCode,
-                    userBankName,
+                    userBankName: sanitizedUserBankName,
                     transType: 'C',
-                    orderId: 'myOrderId123', // Thay đổi nếu cần
+                    orderId: 'myOrderId123',
                     sign: '',
                     qrType: '0',
                 },
@@ -152,13 +153,10 @@ function QrForm() {
         } catch (error) {
            console.error('Lỗi:', error.response?.data || error.message);
             if (error.response) {
-                // Lỗi từ API VietQR
                 alert(`Lỗi từ VietQR API: ${error.response.status} - ${error.response.data.message || 'Không thể tạo QR'}`);
             } else if (error.request) {
-               
                 alert('Không thể kết nối đến VietQR API. Vui lòng kiểm tra kết nối mạng.');
             } else {
-              
                 alert('Đã xảy ra lỗi: ' + error.message);
             }
         }
@@ -166,11 +164,9 @@ function QrForm() {
 
     return (
         <div className="qr-main-container">
-            {/* Cột trái: Form */}
             <div className="qr-form-container">
                 <h2>Thông tin tạo mã</h2>
                 <form onSubmit={handleSubmit}>
-                    {/* Ngân hàng */}
                     <div className="qr-form-group">
                         <label>Ngân hàng</label>
                         <div className="bank-search-wrapper">
@@ -197,7 +193,6 @@ function QrForm() {
                         </div>
                     </div>
 
-                    {/* Số tài khoản */}
                     <div className="qr-form-group">
                         <label>Số tài khoản</label>
                         <input
@@ -209,19 +204,17 @@ function QrForm() {
                         />
                     </div>
 
-                    {/* Tên chủ tài khoản */}
                     <div className="qr-form-group">
                         <label>Tên chủ tài khoản</label>
                         <input
                             type="text"
-                            placeholder="Nhập tên chủ tài khoản (không dấu)"
-                            value={userBankName}
-                            onChange={(e) => setuserBankName(sanitizeInput(e.target.value))}
+                            placeholder="Nhập tên chủ tài khoản"
+                            value={originalUserBankName}
+                            onChange={(e) => setOriginalUserBankName(e.target.value)}
                             required
                         />
                     </div>
 
-                    {/* Số tiền */}
                     <div className="qr-form-group">
                         <label>Số tiền</label>
                         <input
@@ -238,14 +231,13 @@ function QrForm() {
                         />
                     </div>
 
-                    {/* Nội dung thanh toán (không bắt buộc) */}
                     <div className="qr-form-group">
                         <label>Nội dung thanh toán</label>
                         <input
                             type="text"
-                            placeholder="Nội dung không dấu (không bắt buộc)"
-                            value={content}
-                            onChange={(e) => setContent(sanitizeInput(e.target.value))}
+                            placeholder="Nội dung (không bắt buộc)"
+                            value={originalContent}
+                            onChange={(e) => setOriginalContent(e.target.value)}
                         />
                     </div>
 
@@ -255,7 +247,6 @@ function QrForm() {
                 </form>
             </div>
 
-            {/* Cột phải: Hiển thị QR và thông tin */}
             <div className="qr-display-container">
                 <h2>Mã QR của bạn</h2>
 
@@ -276,10 +267,10 @@ function QrForm() {
                         />
                         </div>
                         <p className="qr-content">
-                            Nội dung: {content}
+                            Nội dung: {originalContent}
                             <button
                                 className="copy-btn"
-                                onClick={() => copyToClipboard(content || '')}
+                                onClick={() => copyToClipboard(originalContent || '')}
                             >
                                 Copy
                             </button>
@@ -311,8 +302,8 @@ function QrForm() {
                             className="qr-frame"
                         />
                         <div className="qr-code-overlay">
-                        <QRCodeCanvas 
-                            value="https://vietqr.online"  
+                        <QRCodeCanvas
+                            value="https://vietqr.online"
                             size={180}
                             level="H"
                             fgColor="#0C2477"
@@ -323,7 +314,6 @@ function QrForm() {
                     </div>
                 )}
             </div>
-             {/* Popup tìm ngân hàng */}
             {showBankSearch && (
                 <div className="bank-search-overlay">
                 <div className="bank-search-box">
